@@ -7,7 +7,8 @@ class adminController {
             title: req.body.title,
             price: req.body.price,
             imageUrl: req.body.imageUrl,
-            description: req.body.description
+            description: req.body.description,
+            userId: req.user.id // Assuming req.user is set by middleware
         });
         res.status(201).json({
             message: 'Product added successfully',
