@@ -30,6 +30,8 @@ module.exports = (() => {
   models.Product = require('./product');
   models.Cart = require('./cart');
   models.CartItem = require('./cart-item');
+  models.Order = require('./order');
+  models.OrderItems = require('./order-items');
 
   models.User.hasMany(models.Product)
   models.Product.belongsTo(models.User, {constraints: true, onDelete: 'CASCADE'});
@@ -37,6 +39,12 @@ module.exports = (() => {
   models.Cart.belongsTo(models.User)
   models.Cart.belongsToMany(models.Product, { through: models.CartItem });
   models.Product.belongsToMany(models.Cart, { through: models.CartItem });
+  models.Order.belongsTo(models.User);
+  models.Order.hasMany(models.OrderItems, { foreignKey: 'orderId', as: 'orderItems' });
+  // models.User.hasMany(models.OrderItems, { foreignKey: 'orderId', as: 'orderItems' });
+  models.OrderItems.belongsTo(models.Product, { foreignKey: 'productId' }); 
+  models.Product.hasMany(models.OrderItems, { foreignKey: 'productId', as: 'orderItems' });
+  models.OrderItems.belongsTo(models.Order, { foreignKey: 'orderId' });
 
   return models;
 })();
