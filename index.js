@@ -25,8 +25,11 @@ app.use('/admin', productAdminRoutes);
 const productRoutes = require('./routes/products');
 app.use(productRoutes);
 
+const shopRoutes = require('./routes/shop');
+app.use(shopRoutes);
+
 sequelize
-    .sync()
+    .sync() // Use force: true only for development to reset the database
     .then(() => {
         return models.User.findByPk(1);
     })
@@ -36,8 +39,11 @@ sequelize
         }
         return user;
     })
-    .then((user) => {
-        console.log(user);
+    .then(user => {
+        return user.createCart();
+    })
+    .then((cart) => {
+        console.log(cart);
         app.listen(3002)
     })
     .catch(err => {
